@@ -1,5 +1,5 @@
 ##About
-This library is a javascriptlibrary that allows you to access the Google+ API from client side (Websites), it is built to be very lightweight and
+This library is a javascript library that allows you to access the Google+ API from client side (Websites), it is built to be very lightweight and
 to keep itself in-sync with google's changes
 
 ##Prerequisites
