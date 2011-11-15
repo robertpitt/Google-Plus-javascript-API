@@ -25,7 +25,7 @@ After you have laoded the library you have to instantiate an object, you can acc
 </script>
 ```
 
-oncethis is established you can then use the `GoogleAPI` variable to access any ofthe following methods:
+once this is established you can then use the `GoogleAPI` variable to access any ofthe following methods:
 
 - `getPerson(id, options, callback)`
 - `listByActivity(activityId, collection, options, callback)`
@@ -36,18 +36,18 @@ oncethis is established you can then use the `GoogleAPI` variable to access any 
 - `searchPeople(query, options, callback)`
 
 you will notice a few things about these methods, the first thing is that there is always an `options` and a `callback` at the end of
-each function, the options is a literal-object, the options parameter are option params for the googlerequest, see there documentation for keys and values.
+each function, the options is a literal-object, the options parameter are option params for the request, see there documentation for keys and values.
 
-if you do not wish to pass in any option params (`options`), then you simple fill it's space with an Empty object `{}`, this param should always exists when calling a method
+if you do not wish to pass in any option params (`options`), then you simple fill it's space with an empty object `{}`, this param should always exists when calling a method
 
 ##The Callback
-The callback's are always the same, there are 2 arguments passed into the callback when fired, the first is the `error` object, and second is the `result` object, if therequest was successfull, the error object will be `null`, and teh `result` object will be filled.
+The callback's are always the same, there are 2 arguments passed into the callback when fired, the first is the `error` object, and second is the `result` object, if the request was successfull, the error object will be `null`, and the `result` object will be filled.
 
-The error object and the result objects are relavent to the request, so if your calling `getPerson`, the result object will be a [Person Resource](https://developers.google.com/+/api/latest/people#resource)
+The error object and the result objects are relavent to the request your making, so if your calling `getPerson`, the result object will be a [Person Resource](https://developers.google.com/+/api/latest/people#resource)
 
 ##Getting the data
 
-In order to use the api, you msut first instantiate the object into a variable, see above, and then you can call the api liek so:
+In order to use the api, you must first instantiate the object into a variable, see above, and then you can call the API like so:
 
 ```
 GooglePlusAPI.getPerson('110106586947414476573', {}, function(error, response){
@@ -56,7 +56,7 @@ GooglePlusAPI.getPerson('110106586947414476573', {}, function(error, response){
 ```
 
 ####Note:
-The User ID number should **always** be treated as a string, and nver and interger, this is due to how large the number is and have javascript modifies those large numbers.
+The User ID number should **always** be treated as a string, and never and interger, this is due to how large the number is and have javascript modifies those large numbers.
 
 within the callback we should always check for the error object, to assure that we have made a successfull request, this can be done like so:
 
@@ -93,7 +93,7 @@ GooglePlusAPI.getPerson('110106586947414476573', {}, function(error, result){
 ###The Request Method
 
 The `request` method should not be used that often, but this allows you to make direct requests without using the methods
-the method runs under the same pricipals as the others apart fromt eh first param is a path variable, this path variable is defined from after the **/v1/** of the api, so of i wanted to request the following
+the method runs under the same pricipals as the others apart from teh first param is a path variable, this path variable is defined after the **/v1/** of the API base URL, so of I wanted to request the following URL
 
 `https://www.googleapis.com/plus/v1/people/110106586947414476573`
 
@@ -106,10 +106,10 @@ GooglePlusAPI.request('people/110106586947414476573', {}, function(error, result
 
 ###using the option params argument
 
-When using the optional params in the method calls, you do not ahve to any form of encoding as this is done for you, so if i wanted to search for people named **Robert Pitt** as well as set the pageLimit to 5, i can call the following:
+When using the optional params in the method calls, you do not have to any form of encoding as this is done for you, so if i wanted to search for people named **Robert Pitt** as well as set the `maxResults` to 5, I can call the following:
 
 ```
-GooglePlusAPI.searchPeople('Robert Pitt', {pageLimit: 5}, function(error, result){
+GooglePlusAPI.searchPeople('Robert Pitt', {maxResults: 5}, function(error, result){
     if(error)
     {
         console.log('Error ' + error.code + ': ' + error.message);
