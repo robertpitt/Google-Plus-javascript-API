@@ -19,7 +19,7 @@ once this has been loaded you can then proceed to using the api.
 ##Creating an API object
 After you have laoded the library you have to instantiate an object, you can accomplish that like so:
 
-```
+```html
 <script type="text/javascript">
     var GoogleAPI = new GooglePlusAPI('<Your-API-Key-Here>');
 </script>
@@ -49,7 +49,7 @@ The error object and the result objects are relavent to the request your making,
 
 In order to use the api, you must first instantiate the object into a variable, see above, and then you can call the API like so:
 
-```
+```javascript
 GooglePlusAPI.getPerson('110106586947414476573', {}, function(error, response){
 
 });
@@ -60,7 +60,7 @@ The User ID number should **always** be treated as a string, and never and inter
 
 within the callback we should always check for the error object, to assure that we have made a successfull request, this can be done like so:
 
-```
+```javascript
 GooglePlusAPI.getPerson('110106586947414476573', {}, function(error, result){
     if(error)
     {
@@ -99,7 +99,7 @@ the method runs under the same pricipals as the others apart from teh first para
 
 i would call the following:
 
-```
+```javascript
 GooglePlusAPI.request('people/110106586947414476573', {}, function(error, result){
 });
 ```
@@ -108,7 +108,7 @@ GooglePlusAPI.request('people/110106586947414476573', {}, function(error, result
 
 When using the optional params in the method calls, you do not have to any form of encoding as this is done for you, so if i wanted to search for people named **Robert Pitt** as well as set the `maxResults` to 5, I can call the following:
 
-```
+```javascript
 GooglePlusAPI.searchPeople('Robert Pitt', {maxResults: 5}, function(error, result){
     if(error)
     {
