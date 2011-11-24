@@ -80,7 +80,7 @@ GooglePlusAPI.getPerson('110106586947414476573', {}, function(error, result){
  - id: <String> ActivityID
  - collection: <String> [plusones | reshares]
 - `listActivities(id, options, callback)`
- - id: <String> ActivityID
+ - id: <String> UserID
 - `getActivity(id, options, callback)`
  - id: <String> ActivityID
 - `listComments(id, options, callback)`
