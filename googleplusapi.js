@@ -1,3 +1,9 @@
+/*
+ * Gogole Plus Javascript API
+ * Source: https://github.com/AdminSpot/Google-Plus-javascript-API/
+ * Created by Robert Pitt <https://plus.google.com/110106586947414476573/posts>
+*/
+
 (function () {
 
     /*
