@@ -1,6 +1,6 @@
 ##About
-This library is a javascript library that allows you to access the Google+ API from client side (Websites), it is built to be very lightweight and
-to keep itself in-sync with google's changes
+This library is a javascript library that allows you to access the Google+ API from client side (Websites) as well as server side (NodeJS), it is built to be very lightweight and
+to keep itself in-sync with most of google's changes
 
 ##Prerequisites
 In order for you to use the client library you must first have an API key in order to access the protected resources, follow these instructions in order to get started
@@ -10,9 +10,13 @@ In order for you to use the client library you must first have an API key in ord
 - Once enable you will have a dhashboard for your application, this is where you will find your **Simple API Access API Key**
 - Download a copy of the GooglePlusAPI.js file and add it to your webserver
 
-In your html, within the head of your document, you can load the javascript API like so
+if your using client side, you need to load the library by adding the following require block to your head and setting it to the correct path
 
 `<script type="text/javascript" src="/path/to/googleplusapi.compressed.js"></script>`
+
+if your using server side, you need to requriet he library like so.
+
+`var GooglePlusAPI = require('/path/to/googleplusapi.js')`
 
 once this has been loaded you can then proceed to using the api.
 
@@ -24,6 +28,9 @@ After you have laoded the library you have to instantiate an object, you can acc
     var GoogleAPI = new GooglePlusAPI('<Your-API-Key-Here>');
 </script>
 ```
+Or server side you can just instantiate the api
+
+`var GoogleAPI = new GooglePlusAPI('<Your-API-Key-Here>');`
 
 once this is established you can then use the `GoogleAPI` variable to access any ofthe following methods:
 
