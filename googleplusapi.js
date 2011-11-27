@@ -1,18 +1,38 @@
 /*
- * Gogole Plus Javascript API
- * Source: https://github.com/AdminSpot/Google-Plus-javascript-API/
- * Created by Robert Pitt <https://plus.google.com/110106586947414476573/posts>
+ * About: Gogole Plus Javascript API (Hybrid for NodeJS and Client Side)
+ * Source: <https://github.com/AdminSpot/Google-Plus-javascript-API>
+ * Created by: Robert Pitt <https://plus.google.com/110106586947414476573>
+ * License Type: Opensource (Free to use and modify without warranty)
 */
-
 (function () {
 
     /*
-     * Primary Options
+     * Private Varaibles
      **/
-    var defaults = {
-        base_path : 'https://www.googleapis.com/plus/v1/',
-        api_key : null
-    };
+    var isNode = (typeof module == 'object');
+
+    /*
+     * If NodeJS is present
+    */
+    if(isNode === true)
+    {
+        /*
+         * Require Libraries
+        */
+        var https = require('https');
+        var query = require('querystring');
+
+        /*
+         * Request Options
+        */
+        var requestOptions = {
+            host: 'www.googleapis.com',
+            port: 443,
+            method: 'GET'
+        };
+    }
+    
+    var base_path = 'https://www.googleapis.com/plus/v1/';
 
     /*
      * Merge 2 Objects together
@@ -38,10 +58,8 @@
         {
             throw "you must set the api_key when instantiating the object";
         }
-       
-        this.config = mergeObjects(defaults, {
-            api_key : api_key
-        });
+
+        this.api_key = api_key;
      }
 
     /*
@@ -142,13 +160,20 @@
      **/
     GooglePlusAPI.prototype.request = function(path, options, callback)
     {
+        if(isNode)
+        {
+            this.requestNode(path, options, callback);
+            return;
+        }
+
         /*
          * Create a random function to use as the window.callback
          **/
         var magic = '__GooglePlusApiCallback_' + Math.floor( Math.random() * 1000001 );
 
-        var location = this.buildRequestURL(path, options, magic);
+        var location = this.buildRequestURL(path, options, magic);        
         
+        console.log(location)
         
         window[magic] = function(data)
         {
@@ -170,7 +195,55 @@
         re.src = location;
         var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(re, s);
     }
-    
+
+    GooglePlusAPI.prototype.requestNode = function(path, options, callback)
+    {
+        if(isNode === false)
+        {
+            throw "requestNode can only be called within a NodeJS enviroment"
+        }
+        /*
+         * Compile the Path
+        */
+        var __path = "/plus/v1/" + path + '?' + query.stringify(mergeObjects(options, {
+            key : this.api_key
+        }));
+
+        var request = mergeObjects(requestOptions, {
+            path : __path
+        });
+
+        /*
+         * Start the request
+        */
+        https.request(request, function(Response){
+            var json = '';
+
+            Response.on('data', function(block){
+                json += block;
+            });
+
+            Response.on('close', function(){
+                try
+                {
+                    var jsonData = JSON.parse(json);
+                    if(jsonData.error)
+                    {
+                        callback(jsonData.error, null);
+                        return;
+                    }
+
+                    callback(null, jsonData);
+                    return;
+                }
+                catch(e)
+                {
+                    callback(new Error("Response Code: " + Response.statusCode), null);
+                }
+            });
+        }).end();
+    }
+
     /*
      * @buildRequestURL[path[, options[, callbackID]]]
      * !@Param path: <String> - API Segment of the URL we are collecting
@@ -182,7 +255,7 @@
         /*
          * Assign API Key
          **/
-        options.key = this.config.api_key;
+        options.key = this.api_key;
         
         /*
          * Assign Callback ID
@@ -192,7 +265,7 @@
         /*
          * Construct the base url
          **/
-        var url = this.config.base_path + path;
+        var url = base_path + path;
         
         /*
          * Assign key/Value pairs to GET String
@@ -220,7 +293,13 @@
     }
     
     /*
-     * Export the object to the root window object.
+     * Export the object to the root object (window || module).
      **/
+    if(isNode)
+    {
+        module.exports = GooglePlusAPI;
+        return;
+    }
+
     window.GooglePlusAPI = GooglePlusAPI;
 })();
