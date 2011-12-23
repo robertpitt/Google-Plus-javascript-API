@@ -1,5 +1,5 @@
 /*
- * About: Gogole Plus Javascript API (Hybrid for NodeJS and Client Side)
+ * About: Google Plus Javascript API (Hybrid for NodeJS and Client Side)
  * Source: <https://github.com/AdminSpot/Google-Plus-javascript-API>
  * Created by: Robert Pitt <https://plus.google.com/110106586947414476573>
  * License Type: Opensource (Free to use and modify without warranty)
