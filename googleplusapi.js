@@ -1,5 +1,5 @@
 /*
- * About: Gogole Plus Javascript API (Hybrid for NodeJS and Client Side)
+ * About: Google Plus Javascript API (Hybrid for NodeJS and Client Side)
  * Source: <https://github.com/AdminSpot/Google-Plus-javascript-API>
  * Created by: Robert Pitt <https://plus.google.com/110106586947414476573>
  * License Type: Opensource (Free to use and modify without warranty)
@@ -32,7 +32,17 @@
         };
     }
     
+    /*
+     * Base Path
+     * Location of API Endpoint
+     **/
     var base_path = 'https://www.googleapis.com/plus/v1/';
+    
+    /*
+     * Cache
+     * Object that's used to prevent duel requests
+     **/
+    var cache = [];
 
     /*
      * Merge 2 Objects together
@@ -153,6 +163,42 @@
     }
     
     /*
+     * @isCached[path]
+     * !@Param path: <String> - Location of the resources
+     **/
+     GooglePlusAPI.prototype.isCached = function(path)
+     {
+         for(var i = 0; i < this.cache; i++)
+         {
+             //Check to see if the current itteration holds the path
+             if(this.cache[i].path == path)
+             {
+                 return true;
+             }
+         }
+         
+         return false;
+     }
+     
+    /*
+     * @issueCache[path, callback]
+     * !@Param path: <String> - Location of the resources
+     * !@Param callback: <Function> - Callback to be fired
+     **/
+     GooglePlusAPI.prototype.issueCache = function(path, callback)
+     {
+         //Loop the cache stack and push the cache into the callback
+         for(var i = 0; i < this.cache; i++)
+         {
+             if(this.cache[i].path == path)
+             {
+                 callback(this.cache[i].error || null, this.cache[i].result);
+                 return;
+             }
+         }
+     }
+    
+    /*
      * @request[path[, options[, callback]]]
      * !@Param path: <String> - Location of the resources, example below
      * !@Param options: <Object> - K/V Pairs to send as GET params
@@ -160,6 +206,12 @@
      **/
     GooglePlusAPI.prototype.request = function(path, options, callback)
     {
+        if(this.isCached(path))
+        {
+            this.issueCache(path, callback);
+            return;
+        }
+        
         if(isNode)
         {
             this.requestNode(path, options, callback);
@@ -177,10 +229,16 @@
         
         window[magic] = function(data)
         {
+            //Push this result into the cache
+            this.cache.push({
+                path    : path
+                error   : data.error    || null,
+                result  : data          || null
+            });
+            
             if(data.error)
             {
                 data.error.request = location;
-                
                 callback(data.error, null);
                 return;
             }
